@@ -8,11 +8,25 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
 public class ConfiguracionSeguridad{
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:4200"); // Reemplaza esto con el dominio de tu aplicación Angular
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -20,18 +34,21 @@ public class ConfiguracionSeguridad{
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+         http
         .authorizeHttpRequests(authz -> authz
-            .requestMatchers("/peliculas/**").permitAll()
-            .anyRequest().authenticated() 
+            .requestMatchers(
+                new AntPathRequestMatcher("/usuarios/**"), 
+                new AntPathRequestMatcher("/peliculas/**")
+            ).permitAll() // Permitir acceso sin autenticación a estas URLs
+            .anyRequest().authenticated() // Requerir autenticación para cualquier otra solicitud
         )
-        .formLogin(form -> form
+      /*   .formLogin(form -> form
             .loginPage("/login")
             .permitAll()
         )
         .logout(logout -> logout
             .permitAll()
-        );
+        ) */;
     
     http.csrf(csrf -> csrf.disable()); 
     

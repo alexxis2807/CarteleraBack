@@ -29,7 +29,7 @@ public class UsuarioControlador {
     private String secretKey;
 
     @GetMapping("/busca/{id_usuario}")
-    @CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable("id_usuario") Long id_usuario){
         if (id_usuario == null) {
             return new ResponseEntity("Debe introducir un id de usuario", HttpStatus.BAD_REQUEST);
@@ -43,7 +43,7 @@ public class UsuarioControlador {
     }
 
     @GetMapping()
-    @CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<List<Usuario>> obtenerTodosUsuarios(){
         try {            
             List<Usuario> listaUsuarios = this.usuarioServicio.buscaTodosUsuarios();
@@ -54,7 +54,7 @@ public class UsuarioControlador {
     }
 
     @PostMapping("/registrar")
-    @CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Usuario> registrarUsuario(@RequestBody Usuario usuario){
         if(usuario.getNombreUsuario() == null)
             return  new ResponseEntity("El campo nombreUsuario es obligatorio", HttpStatus.BAD_REQUEST);
@@ -80,7 +80,7 @@ public class UsuarioControlador {
     }
     
     @DeleteMapping("/eliminar/{id_usuario}")
-    @CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Usuario> eliminarUsuario(@PathVariable("id_usuario") Long id_usuario){
         if (id_usuario == null) {
             return new ResponseEntity("Debe introducir un id de usuario", HttpStatus.BAD_REQUEST);
@@ -98,7 +98,7 @@ public class UsuarioControlador {
     }
 
     @GetMapping("/busca/nombre/{nombreUsuario}")
-    @CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Usuario> obtenerUsuarioPorNombre(@PathVariable("nombreUsuario") String nombreUsuario){
         if (nombreUsuario == null) {
             return new ResponseEntity("Debe introducir un nombre de usuario", HttpStatus.BAD_REQUEST);
@@ -112,7 +112,7 @@ public class UsuarioControlador {
     }
 
     @GetMapping("/inicioSesion/{nombreUsuario}/{contraseña}")
-    @CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Usuario> inicioSesion(@PathVariable("nombreUsuario") String nombreUsuario, @PathVariable("contraseña") String contraseña){
 
         if (nombreUsuario == null || contraseña == null) {

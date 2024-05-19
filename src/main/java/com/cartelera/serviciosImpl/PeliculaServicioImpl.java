@@ -14,7 +14,10 @@ public class PeliculaServicioImpl implements PeliculaServicio{
     PeliculaRepositorio peliculaRepositorio;
     @Override
     public Pelicula guardarPelicula(Pelicula pelicula) {
-        return this.peliculaRepositorio.save(pelicula);
+        if (pelicula.getDuracion() > 0) {
+            return this.peliculaRepositorio.save(pelicula);
+        }
+        return null;
     }
 
 }

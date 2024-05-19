@@ -7,19 +7,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.JoinColumn;
 
 import java.util.Set;
+import java.util.Set;
+
+import com.cartelera.request.PeliculaRequest;
 
 @Entity
 @Table(name = "pelicula")
 public class Pelicula {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private boolean adulto;
@@ -68,10 +67,30 @@ public class Pelicula {
     public Pelicula() {}
 
 
+    public Pelicula(PeliculaRequest peliculaApi) {
+        this.id = peliculaApi.getId();
+        this.adulto = peliculaApi.isAdult();
+        this.rutaFondo = peliculaApi.getBackdrop_path();
+        this.generos = peliculaApi.getGenres();
+        this.idiomaOriginal = peliculaApi.getOriginal_language();
+        this.tituloOriginal = peliculaApi.getOriginal_title();
+        this.resumen = peliculaApi.getOverview();
+        this.estado = peliculaApi.getStatus();
+        this.duracion = peliculaApi.getRuntime();
+        this.popularidad = peliculaApi.getPopularity();
+        this.rutaPoster = peliculaApi.getPoster_path();
+        this.fechaEstreno = peliculaApi.getRelease_date();
+        this.titulo = peliculaApi.getTitle();
+        this.video = peliculaApi.isVideo();
+        this.promedioVotos = peliculaApi.getVote_average();
+        this.votosTotales = peliculaApi.getVote_count();
+        this.rutaTrailer = peliculaApi.getTrailer_path();
+    }
 
-    public Pelicula(boolean adulto, String rutaFondo, Set<Genero> generos, String idiomaOriginal, String tituloOriginal,
+    public Pelicula(Long id, boolean adulto, String rutaFondo, Set<Genero> generos, String idiomaOriginal, String tituloOriginal,
             String resumen, String estado, Integer duracion, double popularidad, String rutaPoster, String fechaEstreno,
             String titulo, boolean video, double promedioVotos, int votosTotales, String rutaTrailer) {
+        this.id = id;
         this.adulto = adulto;
         this.rutaFondo = rutaFondo;
         this.generos = generos;
@@ -228,6 +247,16 @@ public class Pelicula {
 
     public void setRutaTrailer(String rutaTrailer) {
         this.rutaTrailer = rutaTrailer;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 
