@@ -13,4 +13,8 @@ import com.cartelera.entidades.Pelicula;
 public interface PeliculaRepositorio extends JpaRepository<Pelicula, Long>{
     @Query("SELECT new com.cartelera.clases.DetallePoster(p.id, p.titulo, p.rutaPoster) FROM Pelicula p")
     List<DetallePoster> obtenerPostersPeliculas();
+
+    @Query("SELECT new com.cartelera.clases.DetallePoster(p.id, p.titulo, p.rutaPoster) FROM Pelicula p WHERE p.fechaEstreno > '2024-01-01' ORDER BY p.promedioVotos DESC")
+    List<DetallePoster> obtenerPostersPeliculasPopulares();
+
 }

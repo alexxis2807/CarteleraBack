@@ -77,5 +77,10 @@ public class PeliculaController {
     @GetMapping("/posters")
     public ResponseEntity<List<DetallePoster>> obtenerDetallesPosterPeliculas (){
         return ResponseEntity.ok(this.peliculaRepositorio.obtenerPostersPeliculas());
-}
+    }
+
+    @GetMapping("/posters/populares")
+    public ResponseEntity<List<DetallePoster>> obtenerDetallesPostersPeliculasPopulares (){
+        return ResponseEntity.ok(this.peliculaRepositorio.obtenerPostersPeliculasPopulares());
+    }
 }
