@@ -22,7 +22,7 @@ public class SesionPeliculaServicioImpl implements SesionPeliculaServicio{
         LocalTime horaInicio = hora;
         LocalTime horaFin = hora.plus(Duration.ofMinutes(duracionPelicula));
 
-        List<SesionPelicula> sesiones = sesionPeliculaRepositorio.encuentraSesionPorFecha(fecha, horaInicio, horaFin);
+        List<SesionPelicula> sesiones = sesionPeliculaRepositorio.encuentraSesionPorFechaYSala(idSala, fecha, horaInicio, horaFin);
         return !sesiones.isEmpty();
     }
 
