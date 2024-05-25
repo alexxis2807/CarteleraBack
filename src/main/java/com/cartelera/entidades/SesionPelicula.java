@@ -16,7 +16,7 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "sesion_pelicula", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"sala_id", "fecha", "hora"})
+    @UniqueConstraint(columnNames = {"sala_id", "fecha", "horaInicio"})
 })
 public class SesionPelicula {
 
@@ -35,21 +35,24 @@ public class SesionPelicula {
     @Column(name = "fecha")
     private LocalDate fecha;
 
-    @Column(name = "hora")
-    private LocalTime hora;
+    @Column(name = "hora_inicio")
+    private LocalTime horaInicio;
+
+    @Column(name = "hora_fin")
+    private LocalTime horaFin;
 
 
+    
     
     public SesionPelicula() {
     }
 
-
-
-    public SesionPelicula(Pelicula pelicula, Sala sala, LocalDate fecha, LocalTime hora) {
+    public SesionPelicula(Pelicula pelicula, Sala sala, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
         this.pelicula = pelicula;
         this.sala = sala;
         this.fecha = fecha;
-        this.hora = hora;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
     }
 
 
@@ -102,14 +105,22 @@ public class SesionPelicula {
 
 
 
-    public LocalTime getHora() {
-        return hora;
+    public LocalTime getHoraInicio() {
+        return horaInicio;
     }
 
 
 
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public LocalTime getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(LocalTime horaFin) {
+        this.horaFin = horaFin;
     }
 
 

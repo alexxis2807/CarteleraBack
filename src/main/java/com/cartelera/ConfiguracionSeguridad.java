@@ -38,7 +38,8 @@ public class ConfiguracionSeguridad{
         .authorizeHttpRequests(authz -> authz
             .requestMatchers(
                 new AntPathRequestMatcher("/usuarios/**"), 
-                new AntPathRequestMatcher("/peliculas/**")
+                new AntPathRequestMatcher("/peliculas/**"),
+                new AntPathRequestMatcher("/sesion_pelicula/**")
             ).permitAll() // Permitir acceso sin autenticación a estas URLs
             .anyRequest().authenticated() // Requerir autenticación para cualquier otra solicitud
         )

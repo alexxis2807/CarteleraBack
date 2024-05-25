@@ -21,11 +21,10 @@ import com.cartelera.repositorios.PeliculaRepositorio;
 import com.cartelera.request.PeliculaRequest;
 import com.cartelera.servicios.PeliculaServicio;
 
-import jakarta.persistence.Tuple;
 
 @RestController
 @RequestMapping("peliculas")
-public class PeliculaController {
+public class PeliculaControlador {
     @Autowired
     PeliculaServicio peliculaServicio;
 
