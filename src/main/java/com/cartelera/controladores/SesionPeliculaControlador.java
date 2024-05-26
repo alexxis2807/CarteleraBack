@@ -42,4 +42,5 @@ public class SesionPeliculaControlador {
     ResponseEntity<List<SesionPelicula>> obtenerSesiones(){
         return ResponseEntity.ok(sesionPeliculaRepositorio.findAll());
     }
+
 }
