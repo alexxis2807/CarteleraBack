@@ -41,19 +41,21 @@ public class SesionPelicula {
     @Column(name = "hora_fin")
     private LocalTime horaFin;
 
+    private double precio;
 
-    
-    
     public SesionPelicula() {
     }
 
-    public SesionPelicula(Pelicula pelicula, Sala sala, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+    public SesionPelicula(Pelicula pelicula, Sala sala, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin,
+            double precio) {
         this.pelicula = pelicula;
         this.sala = sala;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
+        this.precio = precio;
     }
+
 
 
 
@@ -121,6 +123,14 @@ public class SesionPelicula {
 
     public void setHoraFin(LocalTime horaFin) {
         this.horaFin = horaFin;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
 

@@ -30,14 +30,19 @@ public class Entrada {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    private double precio;
+
     public Entrada() {
     }
 
-    public Entrada(SesionPelicula sesionPelicula, int numeroAsiento, Usuario usuario) {
+
+    public Entrada(SesionPelicula sesionPelicula, int numeroAsiento, Usuario usuario, double precio) {
         this.sesionPelicula = sesionPelicula;
         this.numeroAsiento = numeroAsiento;
         this.usuario = usuario;
+        this.precio = precio;
     }
+
 
     public Long getId() {
         return id;
@@ -69,6 +74,16 @@ public class Entrada {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+
+    public double getPrecio() {
+        return precio;
+    }
+
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
     
