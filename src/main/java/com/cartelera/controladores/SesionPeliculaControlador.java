@@ -2,6 +2,7 @@ package com.cartelera.controladores;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cartelera.entidades.SesionPelicula;
+import com.cartelera.repositorios.EntradaRepositorio;
 import com.cartelera.repositorios.SesionPeliculaRepositorio;
 import com.cartelera.servicios.SesionPeliculaServicio;
 
 @RestController
 @RequestMapping("sesion_pelicula")
 public class SesionPeliculaControlador {
+    @Autowired
+    EntradaRepositorio entradaRepositorio;
 
     @Autowired
     SesionPeliculaServicio sesionPeliculaServicio;
@@ -50,9 +54,23 @@ public class SesionPeliculaControlador {
         return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraSesionesFechaPelicula(fecha, idPelicula));
     }
 
-    @GetMapping("/id/{idPelicula}") 
+    @GetMapping("/fechas/id/{idPelicula}") 
     ResponseEntity<Set<LocalDate>> obtenerFechasSesionesPelicula(@PathVariable("idPelicula") Long idPelicula){
         return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraFechasSesionesPelicula(idPelicula));
     }
 
+    @GetMapping("/id/{idSesion}")
+    ResponseEntity<SesionPelicula> obtenerSesionPorId(@PathVariable("idSesion") Long idSesion){
+        Optional<SesionPelicula> sesion = this.sesionPeliculaRepositorio.findById(idSesion);
+        if (sesion.isPresent()) {
+            return ResponseEntity.ok(sesion.get());
+        }
+        return new ResponseEntity("No se ha encontrado la sala.", HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/asientos/idSesion/{idSesion}")
+    public ResponseEntity<Integer[]> obtenerAsientosOcupadosSala(@PathVariable("idSesion") Long idSesion){
+        return ResponseEntity.ok(this.entradaRepositorio.obtenerAsientosOcupados(idSesion));
+    }
 }
+ 
