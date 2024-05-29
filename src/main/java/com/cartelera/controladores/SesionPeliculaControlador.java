@@ -69,7 +69,7 @@ public class SesionPeliculaControlador {
     }
 
     @GetMapping("/asientos/idSesion/{idSesion}")
-    public ResponseEntity<Integer[]> obtenerAsientosOcupadosSala(@PathVariable("idSesion") Long idSesion){
+    public ResponseEntity<List<Integer>> obtenerAsientosOcupadosSala(@PathVariable("idSesion") Long idSesion){
         return ResponseEntity.ok(this.entradaRepositorio.obtenerAsientosOcupados(idSesion));
     }
 }

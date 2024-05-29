@@ -40,6 +40,7 @@ public class ConfiguracionSeguridad{
                 new AntPathRequestMatcher("/usuarios/**"), 
                 new AntPathRequestMatcher("/peliculas/**"),
                 new AntPathRequestMatcher("/sesion_pelicula/**"),
+                new AntPathRequestMatcher("/entrada/**"),
                 new AntPathRequestMatcher("/sala/**")
             ).permitAll() // Permitir acceso sin autenticación a estas URLs
             .anyRequest().authenticated() // Requerir autenticación para cualquier otra solicitud
