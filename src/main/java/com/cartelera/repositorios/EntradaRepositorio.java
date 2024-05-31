@@ -13,6 +13,6 @@ public interface EntradaRepositorio extends JpaRepository<Entrada, Long>{
     @Query("SELECT e.numeroAsiento FROM Entrada e WHERE e.sesionPelicula.id = :idSesion")
     List<Integer> obtenerAsientosOcupados(@Param("idSesion") Long idSesion);
 
-    List<Entrada> findByUsuario_IdUsuario(Long idUsuario);
+    List<Entrada> findByUsuario_nombreUsuario(String nombreUsuario);
     
 }

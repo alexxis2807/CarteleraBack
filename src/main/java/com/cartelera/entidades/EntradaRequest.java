@@ -1,11 +1,11 @@
-package com.cartelera.controladores;
+package com.cartelera.entidades;
 
 import java.util.List;
 
 public class EntradaRequest {
     private Long idSesion;
     private List<Integer> asientos;
-    private Long idUsuario;
+    private String nombreUsuario;
     private double precio;
 
     public Long getIdSesion() {
@@ -20,11 +20,11 @@ public class EntradaRequest {
     public void setAsientos(List<Integer> asientos) {
         this.asientos = asientos;
     }
-    public Long getIdUsuario() {
-        return idUsuario;
+    public String getnombreUsuario() {
+        return nombreUsuario;
     }
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setnombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
    
     public double getPrecio() {

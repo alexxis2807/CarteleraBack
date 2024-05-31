@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cartelera.entidades.Entrada;
+import com.cartelera.entidades.EntradaRequest;
 import com.cartelera.entidades.SesionPelicula;
 import com.cartelera.entidades.Usuario;
 import com.cartelera.repositorios.EntradaRepositorio;
 import com.cartelera.repositorios.SesionPeliculaRepositorio;
+import com.cartelera.repositorios.UsuarioRepositorio;
 
 @RestController
 @RequestMapping("entrada")
@@ -30,6 +32,8 @@ public class EntradaControlador {
     @Autowired
     SesionPeliculaRepositorio sesionPeliculaRepositorio;
     
+    @Autowired
+    UsuarioRepositorio usuarioRepositorio;
     
     @PostMapping("/guardar")
     public ResponseEntity<List<Entrada>> guardarEntradas(@RequestBody EntradaRequest entradaRequest){
@@ -48,8 +52,7 @@ public class EntradaControlador {
         SesionPelicula sesionPelicula = sesionPeliculaRepositorio.findById(entradaRequest.getIdSesion()).get();
         entrada.setSesionPelicula(sesionPelicula);;
         entrada.setNumeroAsiento(asiento);
-        Usuario usuario = new Usuario();
-        usuario.setIdUsuario(entradaRequest.getIdUsuario());
+        Usuario usuario = usuarioRepositorio.findByNombreUsuario(entradaRequest.getnombreUsuario());
         entrada.setUsuario(usuario);;
         entrada.setPrecio(entradaRequest.getPrecio());
         try {
@@ -63,9 +66,9 @@ public class EntradaControlador {
             return ResponseEntity.ok(entradasGuardadas);
     }
 
-    @GetMapping("/idUsuario/{idUsuario}")
-    public ResponseEntity<List<Entrada>> obtenerEntradasUsuario (@PathVariable("idUsuario") Long idUsuario){
-        return ResponseEntity.ok(this.entradaRepositorio.findByUsuario_IdUsuario(idUsuario));
+    @GetMapping("/nombreUsuario/{nombreUsuario}")
+    public ResponseEntity<List<Entrada>> obtenerEntradasUsuario (@PathVariable("nombreUsuario") String nombreUsuario){
+        return ResponseEntity.ok(this.entradaRepositorio.findByUsuario_nombreUsuario(nombreUsuario));
     }
 
     @DeleteMapping("/eliminar/{idEntrada}")
