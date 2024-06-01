@@ -2,6 +2,7 @@ package com.cartelera.controladores;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cartelera.entidades.ConfirmaEntrada;
 import com.cartelera.entidades.Entrada;
 import com.cartelera.entidades.EntradaRequest;
 import com.cartelera.entidades.SesionPelicula;
@@ -65,6 +68,23 @@ public class EntradaControlador {
         }
             return ResponseEntity.ok(entradasGuardadas);
     }
+
+    @PutMapping("/confirmarEntrada")
+    public ResponseEntity<Entrada> confirmarEntrada(@RequestBody ConfirmaEntrada confirmaEntrada){
+        Long idEntrada = confirmaEntrada.getIdEntrada();
+        String nombreUsuario = confirmaEntrada.getNombreUsuario();
+
+        Optional<Entrada> optionalEntrada = entradaRepositorio.findById(idEntrada);
+        if (optionalEntrada.isPresent()) {
+            Entrada entrada = optionalEntrada.get();
+            Usuario usuario = usuarioRepositorio.findByNombreUsuario(nombreUsuario);
+            entrada.setUsuario(usuario);
+            return ResponseEntity.ok(entradaRepositorio.save(entrada));
+            
+        }
+        return new ResponseEntity("No existe la entrada", HttpStatus.NOT_FOUND);
+    }
+
 
     @GetMapping("/nombreUsuario/{nombreUsuario}")
     public ResponseEntity<List<Entrada>> obtenerEntradasUsuario (@PathVariable("nombreUsuario") String nombreUsuario){
