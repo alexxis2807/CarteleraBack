@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cartelera.entidades.BodyInicioSesion;
 import com.cartelera.entidades.Usuario;
+import com.cartelera.seguridad.JwtUtil;
 import com.cartelera.servicios.UsuarioServicio;
 
 @RestController
@@ -23,7 +25,9 @@ import com.cartelera.servicios.UsuarioServicio;
 public class UsuarioControlador {
 
     @Autowired
-    UsuarioServicio usuarioServicio;
+    private UsuarioServicio usuarioServicio;
+    @Autowired
+    private JwtUtil jwUtil;
 
     @GetMapping("/verificaToken")
     public ResponseEntity<Boolean> verificaToken(){
@@ -71,6 +75,8 @@ public class UsuarioControlador {
             }
             
             Usuario usuarioRegistrado = this.usuarioServicio.registrarUser(usuario);
+            usuarioRegistrado.setContraseña(jwUtil.generateToken(usuarioRegistrado.getContraseña()));
+
             return ResponseEntity.ok(usuarioRegistrado);
 
         }catch (DataAccessException ex) {
@@ -85,6 +91,7 @@ public class UsuarioControlador {
         }
         try {
             Usuario usuario = this.usuarioServicio.buscaPorIdUsuario(id_usuario);
+            
             if(usuario == null){
                 return new ResponseEntity("No existe ese usuario",HttpStatus.NOT_FOUND);
             }
@@ -108,23 +115,23 @@ public class UsuarioControlador {
         }
     }
 
-    @GetMapping("/inicioSesion/{nombreUsuario}/{contraseña}")
-    public ResponseEntity<Usuario> inicioSesion(@PathVariable("nombreUsuario") String nombreUsuario, @PathVariable("contraseña") String contraseña){
+    @PostMapping("/inicioSesion")
+    public ResponseEntity<Usuario> inicioSesion(@RequestBody BodyInicioSesion datosUsuario){
 
-        if (nombreUsuario == null || contraseña == null) {
+        if (datosUsuario.getNombreUsuario() == null || datosUsuario.getContrasena() == null) {
             return new ResponseEntity("Falta algun dato obligatorio (nombreUsuario, contraseña)", HttpStatus.BAD_REQUEST);
         }
-        if(!this.usuarioServicio.existeNombreUsuario(nombreUsuario)){
+        if(!this.usuarioServicio.existeNombreUsuario(datosUsuario.getNombreUsuario())){
             return new ResponseEntity("No existe ese nombre de usuario", HttpStatus.NOT_FOUND);
         }
 
         try {
-            Usuario usuario = this.usuarioServicio.inicioSesion(nombreUsuario, contraseña);
+            Usuario usuario = this.usuarioServicio.inicioSesion(datosUsuario.getNombreUsuario(), datosUsuario.getContrasena());
     
             if(usuario == null){
                 return new ResponseEntity("La contraseña es incorrecta", HttpStatus.NOT_FOUND);
             }
-    
+            usuario.setContraseña(jwUtil.generateToken(usuario.getContraseña()));
             return ResponseEntity.ok(usuario);
         } catch (DataAccessException e) {
             return new ResponseEntity("Error al conectar con la base de datos", HttpStatus.INTERNAL_SERVER_ERROR);

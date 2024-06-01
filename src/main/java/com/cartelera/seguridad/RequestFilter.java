@@ -25,28 +25,40 @@ public class RequestFilter extends OncePerRequestFilter{
 @Autowired
 UsuarioRepositorio usuarioRepositorio;
 
+@Autowired
+JwtUtil jwtUtil;
+
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
+            String passwordUsuario = null;
+            String jwt = null;
         String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
         String username = request.getHeader("Username");
         if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX) && username != null) {
-            String jwt = authorizationHeader.substring(TOKEN_PREFIX.length());
-            Usuario usuario = this.usuarioRepositorio.findByNombreUsuario(username);
-            if (usuario.getContraseña().equals(jwt)) {
-                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        usuario, null, Collections.emptyList());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }else{
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                response.setContentType("text/html; charset=UTF-8");
-                PrintWriter writer = response.getWriter();
-                writer.println("Acceso no autorizado. Inicie sesión o aporte credenciales válidas");
-                writer.close();
+            jwt = authorizationHeader.substring(TOKEN_PREFIX.length());
+            try {
+                passwordUsuario = jwtUtil.extractPassword(jwt);    
+            } catch (IllegalArgumentException e) {
+                filterChain.doFilter(request, response);
+            }
+            if (passwordUsuario != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                
+                Usuario usuario = this.usuarioRepositorio.findByNombreUsuario(username);
+                if (jwtUtil.validateToken(jwt, usuario.getContraseña())) {
+                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            usuario, null, Collections.emptyList());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }else{
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                    response.setContentType("text/html; charset=UTF-8");
+                    PrintWriter writer = response.getWriter();
+                    writer.println("Acceso no autorizado. Inicie sesión o aporte credenciales válidas");
+                    writer.close();
+                }
             }
         }
         filterChain.doFilter(request, response);
