@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,8 @@ public class RequestFilter extends OncePerRequestFilter{
 @Autowired
 UsuarioRepositorio usuarioRepositorio;
 
+@Value("${ipPermitidaSwagger}")
+private String ipPermitidaSwagger;
 @Autowired
 JwtUtil jwtUtil;
 
@@ -33,6 +36,22 @@ JwtUtil jwtUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
+            String ipUsuario = request.getRemoteAddr();
+            
+           
+                if (ipUsuario.equals(ipPermitidaSwagger)) {
+                    Usuario usuario = this.usuarioRepositorio.findByNombreUsuario("administrador");
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            usuario, null, Collections.emptyList());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    filterChain.doFilter(request, response);
+
+                    return;
+                }
+            
+
             String passwordUsuario = null;
             String jwt = null;
         String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);

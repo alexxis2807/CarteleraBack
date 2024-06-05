@@ -1,6 +1,7 @@
 package com.cartelera.seguridad;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,9 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class ConfiguracionSeguridad{
 
+    @Value("${cors.allowed.url}")
+    private String corsUrl;
+
     @Autowired
     RequestFilter requestFilter;
 
@@ -30,7 +34,7 @@ public class ConfiguracionSeguridad{
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:4200"); // Reemplaza esto con el dominio de tu aplicación Angular
+        config.addAllowedOrigin(corsUrl); 
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
@@ -41,6 +45,7 @@ public class ConfiguracionSeguridad{
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 

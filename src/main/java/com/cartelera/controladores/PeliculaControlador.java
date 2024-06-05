@@ -32,7 +32,6 @@ public class PeliculaControlador {
     PeliculaRepositorio peliculaRepositorio;
 
     @PostMapping("/agregar")
-    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<Pelicula> agregarPeliculaABbdd(@RequestBody PeliculaRequest pelicula){
         if (this.peliculaRepositorio.existsById(pelicula.getId())) {
             return new ResponseEntity("El id ya existe", HttpStatus.BAD_REQUEST);
