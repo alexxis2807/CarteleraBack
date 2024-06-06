@@ -1,11 +1,13 @@
 package com.cartelera.servicios;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.cartelera.entidades.Entrada;
 
 @Service
-public interface EntradaServicio extends JpaRepository<Entrada, Long> {
-
+public interface EntradaServicio {
+    List<Entrada> obtenerEntradasActuales(String nombreUsuario);
 }

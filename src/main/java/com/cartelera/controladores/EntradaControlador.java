@@ -25,12 +25,16 @@ import com.cartelera.entidades.Usuario;
 import com.cartelera.repositorios.EntradaRepositorio;
 import com.cartelera.repositorios.SesionPeliculaRepositorio;
 import com.cartelera.repositorios.UsuarioRepositorio;
+import com.cartelera.servicios.EntradaServicio;
 
 @RestController
 @RequestMapping("entrada")
 public class EntradaControlador {
     @Autowired
     EntradaRepositorio entradaRepositorio;
+
+    @Autowired
+    EntradaServicio entradaServicio;
 
     @Autowired
     SesionPeliculaRepositorio sesionPeliculaRepositorio;
@@ -87,6 +91,11 @@ public class EntradaControlador {
 
 
     @GetMapping("/nombreUsuario/{nombreUsuario}")
+    public ResponseEntity<List<Entrada>> obtenerEntradasActualesUsuario (@PathVariable("nombreUsuario") String nombreUsuario){
+        return ResponseEntity.ok(this.entradaServicio.obtenerEntradasActuales(nombreUsuario));
+    }
+
+    @GetMapping("/todas/nombreUsuario/{nombreUsuario}")
     public ResponseEntity<List<Entrada>> obtenerEntradasUsuario (@PathVariable("nombreUsuario") String nombreUsuario){
         return ResponseEntity.ok(this.entradaRepositorio.findByUsuario_nombreUsuario(nombreUsuario));
     }

@@ -1,6 +1,7 @@
 package com.cartelera.controladores;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -51,12 +52,18 @@ public class SesionPeliculaControlador {
 
     @GetMapping("/fecha/{fecha}/id/{idPelicula}") 
     ResponseEntity<List<SesionPelicula>> obtenerSesionesPeliculaFecha(@PathVariable("fecha") LocalDate fecha, @PathVariable("idPelicula") Long idPelicula){
-        return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraSesionesFechaPelicula(fecha, idPelicula));
+        LocalDate fechaActual = LocalDate.now();
+        LocalTime horaActual = LocalTime.now();
+
+        return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraSesionesFechaPelicula(fecha, idPelicula, fechaActual, horaActual));
     }
 
     @GetMapping("/fechas/id/{idPelicula}") 
     ResponseEntity<Set<LocalDate>> obtenerFechasSesionesPelicula(@PathVariable("idPelicula") Long idPelicula){
-        return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraFechasSesionesPelicula(idPelicula));
+        LocalDate fechaActual = LocalDate.now();
+        LocalTime horaActual = LocalTime.now();
+
+        return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraFechasSesionesPelicula(idPelicula, fechaActual, horaActual));
     }
 
     @GetMapping("/id/{idSesion}")
