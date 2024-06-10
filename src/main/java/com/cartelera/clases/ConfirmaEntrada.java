@@ -1,4 +1,4 @@
-package com.cartelera.entidades;
+package com.cartelera.clases;
 
 public class ConfirmaEntrada {
     private Long idEntrada;

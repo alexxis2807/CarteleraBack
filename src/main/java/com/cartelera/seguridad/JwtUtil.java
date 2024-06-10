@@ -18,19 +18,16 @@ public class JwtUtil {
 
     public String generateToken(String password) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, password);
-    }
-
-    private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject)
+                .setSubject(password)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String extractPassword(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
+        .parseClaimsJws(token).getBody();
         return claims.getSubject();
         }
 

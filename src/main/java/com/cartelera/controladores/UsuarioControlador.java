@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cartelera.entidades.BodyInicioSesion;
+import com.cartelera.clases.BodyInicioSesion;
 import com.cartelera.entidades.Usuario;
+import com.cartelera.repositorios.EntradaRepositorio;
 import com.cartelera.seguridad.JwtUtil;
 import com.cartelera.servicios.UsuarioServicio;
 
@@ -26,6 +27,8 @@ public class UsuarioControlador {
 
     @Autowired
     private UsuarioServicio usuarioServicio;
+    @Autowired
+    private EntradaRepositorio entradaRepositorio;
     @Autowired
     private JwtUtil jwUtil;
 
@@ -95,10 +98,11 @@ public class UsuarioControlador {
             if(usuario == null){
                 return new ResponseEntity("No existe ese usuario",HttpStatus.NOT_FOUND);
             }
+            this.entradaRepositorio.deleteByUsuario_idUsuario(id_usuario);
             this.usuarioServicio.eliminarUsuario(id_usuario);
             return ResponseEntity.ok(usuario);
         } catch (DataAccessException e) {
-            return new ResponseEntity("Error al conectar con la base de datos", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

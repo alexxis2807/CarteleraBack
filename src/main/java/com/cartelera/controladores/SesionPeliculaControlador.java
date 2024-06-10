@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.ResourceAccessException;
 
 import com.cartelera.entidades.SesionPelicula;
 import com.cartelera.repositorios.EntradaRepositorio;
@@ -26,23 +27,30 @@ import com.cartelera.servicios.SesionPeliculaServicio;
 public class SesionPeliculaControlador {
     @Autowired
     EntradaRepositorio entradaRepositorio;
-
     @Autowired
     SesionPeliculaServicio sesionPeliculaServicio;
-
     @Autowired
     SesionPeliculaRepositorio sesionPeliculaRepositorio;
 
     @PostMapping("/guardar")
     public ResponseEntity<SesionPelicula> guardarSesionPelicula(@RequestBody SesionPelicula sesionPelicula){
-        if (sesionPeliculaServicio.sesionCoincide(sesionPelicula.getSala().getId(),sesionPelicula.getFecha(),sesionPelicula.getHoraInicio(), sesionPelicula.getPelicula().getDuracion())) {
+        try {
+            LocalDate fecha = sesionPelicula.getFecha();
+            LocalTime horaInicio = sesionPelicula.getHoraInicio();
+            int duracion = sesionPelicula.getPelicula().getDuracion();
+        if (sesionPeliculaServicio.sesionCoincide(sesionPelicula.getSala().getId(),fecha,horaInicio, duracion)) {
             return new ResponseEntity("La sesion coincide con otra sesión", HttpStatus.BAD_REQUEST);
         }
-        SesionPelicula sesionGuardada = sesionPeliculaServicio.guardarSesionPelicula(sesionPelicula);
+            
+            SesionPelicula sesionGuardada = sesionPeliculaServicio.guardarSesionPelicula(sesionPelicula);
         if (sesionGuardada != null) {
             return ResponseEntity.ok(sesionGuardada);
         }
-        return new ResponseEntity("Ha ocurrido un error.", HttpStatus.INTERNAL_SERVER_ERROR);
+    
+    return new ResponseEntity("Ha ocurrido un error.", HttpStatus.INTERNAL_SERVER_ERROR);
+    } catch (ResourceAccessException e) {
+        return new ResponseEntity("No hay conexión con la base de datos", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/") 

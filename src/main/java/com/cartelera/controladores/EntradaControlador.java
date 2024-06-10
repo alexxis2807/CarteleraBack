@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cartelera.entidades.ConfirmaEntrada;
+import com.cartelera.clases.ConfirmaEntrada;
+import com.cartelera.clases.EntradaRequest;
 import com.cartelera.entidades.Entrada;
-import com.cartelera.entidades.EntradaRequest;
 import com.cartelera.entidades.SesionPelicula;
 import com.cartelera.entidades.Usuario;
 import com.cartelera.repositorios.EntradaRepositorio;
