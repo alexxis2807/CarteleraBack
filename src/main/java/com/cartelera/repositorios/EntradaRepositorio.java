@@ -20,8 +20,8 @@ public interface EntradaRepositorio extends JpaRepository<Entrada, Long>{
 
     List<Entrada> findByUsuario_nombreUsuario(String nombreUsuario);
     
-    @Query("SELECT e FROM Entrada e WHERE e.usuario.nombreUsuario = :nombre AND e.sesionPelicula.fecha > :fechaActual OR (e.sesionPelicula.fecha = :fechaActual AND e.sesionPelicula.horaInicio > :horaActual)")
-    List<Entrada> obtenerEntradaActuales(@Param("nombre") String nombre, @Param("fechaActual") LocalDate fechaActual, @Param("horaActual") LocalTime horaActual);
+    @Query("SELECT e FROM Entrada e WHERE e.usuario.nombreUsuario = :nombre AND ( e.sesionPelicula.fecha > CURRENT_DATE OR (e.sesionPelicula.fecha = CURRENT_DATE AND e.sesionPelicula.horaInicio > CURRENT_TIME))")
+    List<Entrada> obtenerEntradaActuales(@Param("nombre") String nombre);
     
     @Transactional
     void deleteByUsuario_idUsuario(Long idUsuario);

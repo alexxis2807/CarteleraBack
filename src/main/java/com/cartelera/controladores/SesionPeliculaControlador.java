@@ -60,18 +60,12 @@ public class SesionPeliculaControlador {
 
     @GetMapping("/fecha/{fecha}/id/{idPelicula}") 
     ResponseEntity<List<SesionPelicula>> obtenerSesionesPeliculaFecha(@PathVariable("fecha") LocalDate fecha, @PathVariable("idPelicula") Long idPelicula){
-        LocalDate fechaActual = LocalDate.now();
-        LocalTime horaActual = LocalTime.now();
-
-        return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraSesionesFechaPelicula(fecha, idPelicula, fechaActual, horaActual));
+        return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraSesionesFechaPelicula(fecha, idPelicula));
     }
 
     @GetMapping("/fechas/id/{idPelicula}") 
     ResponseEntity<Set<LocalDate>> obtenerFechasSesionesPelicula(@PathVariable("idPelicula") Long idPelicula){
-        LocalDate fechaActual = LocalDate.now();
-        LocalTime horaActual = LocalTime.now();
-
-        return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraFechasSesionesPelicula(idPelicula, fechaActual, horaActual));
+        return ResponseEntity.ok(this.sesionPeliculaRepositorio.encuentraFechasSesionesPelicula(idPelicula));
     }
 
     @GetMapping("/id/{idSesion}")

@@ -19,9 +19,8 @@ public class EntradaServicioImpl implements EntradaServicio{
 
     @Override
     public List<Entrada> obtenerEntradasActuales(String nombreUsuario) {
-        LocalDate fechaActual = LocalDate.now();
-        LocalTime horaActual = LocalTime.now();
-        return this.entradaRepositorio.obtenerEntradaActuales(nombreUsuario, fechaActual, horaActual);
+       
+        return this.entradaRepositorio.obtenerEntradaActuales(nombreUsuario);
     }
 
 
